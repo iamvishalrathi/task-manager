@@ -185,19 +185,38 @@ The project uses a custom Tailwind configuration with:
 
 ## 🚀 Deployment
 
+### ⚠️ Important: MSW Configuration for Production
+
+**For demo purposes, this app uses MSW (Mock Service Worker) in production.** 
+Add this environment variable to enable the mock API:
+
+```env
+VITE_ENABLE_MSW=true
+```
+
 ### Vercel (Recommended)
 1. Connect your GitHub repository to Vercel
 2. Configure build settings:
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
-3. Deploy automatically on push
+3. **Add Environment Variables**:
+   ```
+   VITE_ENABLE_MSW=true
+   VITE_DEMO_MODE=true
+   ```
+4. Deploy automatically on push
 
 ### Netlify
 1. Connect your repository to Netlify
 2. Configure build settings:
    - **Build Command**: `npm run build`
    - **Publish Directory**: `dist`
-3. Deploy automatically on push
+3. **Add Environment Variables**:
+   ```
+   VITE_ENABLE_MSW=true
+   VITE_DEMO_MODE=true
+   ```
+4. Deploy automatically on push
 
 ### Docker
 ```bash

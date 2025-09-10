@@ -11,8 +11,8 @@ export const MSW_CONFIG = {
     waitUntilReady: true,
   },
   
-  // Development only
-  ENABLED: import.meta.env.DEV,
+  // Enable in development OR when explicitly enabled via env var
+  ENABLED: import.meta.env.DEV || import.meta.env.VITE_ENABLE_MSW === 'true',
 } as const;
 
 export default MSW_CONFIG;

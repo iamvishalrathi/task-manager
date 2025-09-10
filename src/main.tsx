@@ -3,9 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-// Start MSW for development
+// Start MSW for both development and production (demo app)
 async function enableMocking() {
-  if (import.meta.env.DEV) {
+  // Enable MSW for demo purposes in production too
+  const shouldEnableMSW = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MSW === 'true';
+  
+  if (shouldEnableMSW) {
     const { worker } = await import('./mocks/browser');
     const { MSW_CONFIG } = await import('./mocks/config');
     
