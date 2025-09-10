@@ -6,7 +6,10 @@ import {
   FunnelIcon,
   ArrowRightOnRectangleIcon,
   Squares2X2Icon,
-  ListBulletIcon
+  ListBulletIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logout } from '../store/authSlice';
@@ -207,33 +210,45 @@ const Dashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8"
         >
-          <Card className="text-center">
+          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
             <div className="p-2">
-              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400">Total Tasks</h3>
-              <p className="text-2xl font-bold text-surface-900 dark:text-surface-100 mt-1">{taskCounts.all}</p>
+              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center">
+                <Squares2X2Icon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">Total Tasks</h3>
+              <p className="text-3xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.all}</p>
             </div>
           </Card>
           
-          <Card className="text-center">
+          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
             <div className="p-2">
-              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400">To Do</h3>
-              <p className="text-2xl font-bold text-surface-600 dark:text-surface-300 mt-1">{taskCounts.todo}</p>
+              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-surface-400 to-surface-500 rounded-xl flex items-center justify-center">
+                <ExclamationCircleIcon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">To Do</h3>
+              <p className="text-3xl font-bold text-surface-600 dark:text-surface-300">{taskCounts.todo}</p>
             </div>
           </Card>
           
-          <Card className="text-center">
+          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
             <div className="p-2">
-              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400">In Progress</h3>
-              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mt-1">{taskCounts['in-progress']}</p>
+              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                <ClockIcon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">In Progress</h3>
+              <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{taskCounts['in-progress']}</p>
             </div>
           </Card>
           
-          <Card className="text-center">
+          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
             <div className="p-2">
-              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400">Completed</h3>
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">{taskCounts.done}</p>
+              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-green-400 to-green-500 rounded-xl flex items-center justify-center">
+                <CheckCircleIcon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">Completed</h3>
+              <p className="text-3xl font-bold text-green-600 dark:text-green-400">{taskCounts.done}</p>
             </div>
           </Card>
         </motion.div>
@@ -243,9 +258,9 @@ const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6"
+          className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8"
         >
-          <div className="flex flex-col sm:flex-row gap-4 flex-1">
+          <div className="flex flex-col sm:flex-row gap-4 flex-1 w-full">
             {/* Search */}
             <div className="flex-1 max-w-md">
               <Input
@@ -253,43 +268,46 @@ const Dashboard: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
+                className="h-10"
               />
             </div>
             
             {/* Filter */}
-            <div className="flex items-center space-x-2">
-              <FunnelIcon className="h-4 w-4 text-surface-500 dark:text-surface-400" />
+            <div className="flex items-center space-x-3 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
+              <FunnelIcon className="h-4 w-4 text-surface-500 dark:text-surface-400 flex-shrink-0" />
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="rounded-lg border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
               >
-                <option value="all">All Status</option>
-                <option value="todo">To Do</option>
-                <option value="in-progress">In Progress</option>
-                <option value="done">Done</option>
+                <option value="all" className="bg-white dark:bg-surface-800">All Status</option>
+                <option value="todo" className="bg-white dark:bg-surface-800">To Do</option>
+                <option value="in-progress" className="bg-white dark:bg-surface-800">In Progress</option>
+                <option value="done" className="bg-white dark:bg-surface-800">Done</option>
               </select>
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-surface-100 dark:bg-surface-800 rounded-lg p-1">
+            <div className="flex items-center bg-surface-100 dark:bg-surface-800 rounded-lg p-1 border border-surface-200 dark:border-surface-700">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${
+                className={`p-2 rounded-md transition-all duration-200 ${
                   viewMode === 'grid' 
-                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400' 
-                    : 'text-surface-500 dark:text-surface-400'
+                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400 scale-105' 
+                    : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-300'
                 }`}
+                title="Grid View"
               >
                 <Squares2X2Icon className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${
+                className={`p-2 rounded-md transition-all duration-200 ${
                   viewMode === 'list' 
-                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400' 
-                    : 'text-surface-500 dark:text-surface-400'
+                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400 scale-105' 
+                    : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-300'
                 }`}
+                title="List View"
               >
                 <ListBulletIcon className="h-4 w-4" />
               </button>
@@ -299,9 +317,9 @@ const Dashboard: React.FC = () => {
           <Button
             onClick={() => setIsFormOpen(true)}
             leftIcon={<PlusIcon className="h-4 w-4" />}
-            className="shrink-0"
+            className="w-full sm:w-auto"
           >
-            New Task
+            Add Task
           </Button>
         </motion.div>
 

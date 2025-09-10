@@ -81,30 +81,33 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ y: -4, scale: 1.02 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="h-full"
     >
-      <Card hover className="relative group">
+      <Card hover className="relative group h-full flex flex-col">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
             <motion.div
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="flex-shrink-0"
             >
               {getStatusIcon(task.status)}
             </motion.div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 truncate">
+              <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {task.title}
               </h3>
-              <div className="mt-1">
+              <div className="mt-2">
                 {getStatusBadge(task.status)}
               </div>
             </div>
           </div>
           
           <Menu as="div" className="relative">
-            <Menu.Button className="p-1 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 transition-colors opacity-0 group-hover:opacity-100">
+            <Menu.Button className="p-2 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 transition-all duration-200 opacity-0 group-hover:opacity-100 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-md">
               <EllipsisVerticalIcon className="h-5 w-5" />
             </Menu.Button>
             <Transition
@@ -151,18 +154,20 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
           </Menu>
         </div>
         
-        <p className="text-surface-600 dark:text-surface-400 mb-4 text-sm leading-relaxed">
-          {truncateText(task.description, 120)}
-        </p>
+        <div className="flex-1 mb-4">
+          <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed line-clamp-3">
+            {truncateText(task.description, 120)}
+          </p>
+        </div>
         
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-3 border-t border-surface-200 dark:border-surface-700">
           <select
             value={task.status}
             onChange={(e) => handleStatusChange(e.target.value as Task['status'])}
             disabled={isUpdating}
             className={cn(
-              'text-xs font-medium rounded-full border-0 focus:ring-2 focus:ring-primary-500 transition-all',
-              'bg-surface-100 dark:bg-surface-700 text-surface-800 dark:text-surface-200',
+              'text-xs font-medium rounded-lg border border-surface-300 dark:border-surface-600 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all px-2 py-1',
+              'bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-600',
               'disabled:opacity-50 disabled:cursor-not-allowed'
             )}
           >
@@ -171,18 +176,22 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
             <option value="done">Done</option>
           </select>
           
-          <span className="text-xs text-surface-500 dark:text-surface-400">
-            {formatRelativeTime(task.updatedAt)}
-          </span>
+          <div className="flex items-center space-x-2 text-xs text-surface-500 dark:text-surface-400">
+            <ClockIcon className="h-3 w-3" />
+            <span>{formatRelativeTime(task.updatedAt)}</span>
+          </div>
         </div>
 
         {isUpdating && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-white/50 dark:bg-surface-800/50 flex items-center justify-center rounded-xl"
+            className="absolute inset-0 bg-white/80 dark:bg-surface-800/80 backdrop-blur-sm flex items-center justify-center rounded-xl"
           >
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+            <div className="flex items-center space-x-2">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+              <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">Updating...</span>
+            </div>
           </motion.div>
         )}
       </Card>

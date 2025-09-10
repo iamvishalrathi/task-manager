@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({
   shadow = 'md',
   hover = false,
 }) => {
-  const baseClasses = 'bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700';
+  const baseClasses = 'bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 transition-all duration-200';
   
   const paddings = {
     none: '',
@@ -31,13 +31,17 @@ const Card: React.FC<CardProps> = ({
     lg: 'shadow-medium',
   };
 
+  const hoverEffects = hover 
+    ? 'hover:shadow-large hover:scale-[1.01] hover:border-surface-300 dark:hover:border-surface-600 cursor-pointer' 
+    : '';
+
   return (
     <div
       className={cn(
         baseClasses,
         paddings[padding],
         shadows[shadow],
-        hover && 'transition-all duration-200 hover:shadow-large hover:scale-[1.02]',
+        hoverEffects,
         className
       )}
     >
