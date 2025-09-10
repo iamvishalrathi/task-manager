@@ -26,8 +26,6 @@
     "@heroicons/react": "^2.2.0",
     "@reduxjs/toolkit": "^2.9.0",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "dotenv": "^17.2.2",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.543.0",
     "msw": "^2.11.2",

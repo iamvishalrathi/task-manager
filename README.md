@@ -75,7 +75,6 @@ A comprehensive, production-ready task management application built with React, 
 - **PostCSS** - CSS processing and optimization
 
 ### **Utilities**
-- **date-fns** - Modern JavaScript date utility library
 - **clsx** - Utility for constructing className strings
 
 ## 🏃‍♂️ Quick Start
@@ -122,13 +121,12 @@ src/
 │   ├── ProtectedRoute.tsx
 │   ├── TaskCard.tsx
 │   └── TaskForm.tsx
-├── contexts/            # React contexts
-│   └── ThemeContext.tsx
 ├── hooks/               # Custom React hooks
 │   └── redux.ts
 ├── mocks/               # MSW mock handlers
-│   ├── browser.ts
-│   └── handlers.ts
+│   ├── config.ts
+│   ├── handlers.ts
+│   └── browser.ts
 ├── pages/               # Page components
 │   └── Dashboard.tsx
 ├── services/            # API services
@@ -138,13 +136,8 @@ src/
 │   ├── taskSlice.ts
 │   ├── themeSlice.ts
 │   └── index.ts
-├── types/               # TypeScript type definitions
-│   └── index.ts
 ├── utils/               # Utility functions
-│   ├── date.ts
-│   ├── export.ts
-│   ├── text.ts
-│   └── cn.ts
+│   └── index.ts
 └── App.tsx              # Main application component
 ```
 
@@ -256,12 +249,52 @@ The application includes:
 - **Error Boundaries**: Production-ready error handling
 - **Form Validation**: Client-side validation with error messages
 
-## 📈 Performance
+## � Deployment
 
-- **Bundle Size**: Optimized with Vite and tree-shaking
-- **Loading States**: Skeleton screens for better perceived performance
-- **Code Splitting**: Lazy loading of components
-- **Asset Optimization**: Optimized images and icons
+### Production Deployment
+
+The application includes Mock Service Worker (MSW) support for production deployment, making it perfect for demos and portfolios.
+
+#### For Vercel:
+1. **Environment Variables** (add in Vercel dashboard):
+   ```
+   VITE_ENABLE_MSW=true
+   ```
+
+2. **Build Settings**:
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+
+#### For Netlify:
+1. **Environment Variables** (add in Netlify dashboard):
+   ```
+   VITE_ENABLE_MSW=true
+   ```
+
+2. **Build Settings**:
+   - Build Command: `npm run build`
+   - Publish Directory: `dist`
+
+#### Docker Deployment:
+```bash
+# Build and run with Docker
+docker build -t task-manager .
+docker run -p 3000:80 task-manager
+```
+
+#### Manual Deployment:
+```bash
+# Build with MSW enabled
+VITE_ENABLE_MSW=true npm run build
+
+# Serve the dist folder with any static server
+```
+
+### Demo Credentials
+- **Username**: `demo@example.com` or `test@example.com`
+- **Password**: `password` or `test123`
+
+**Note**: MSW in production is for demo purposes. In real applications, connect to actual backend APIs.
 
 ## 🤝 Contributing
 
@@ -532,19 +565,16 @@ npm run build
 
 ## 🔮 Future Enhancements
 
-### Bonus Features to Implement
-- [ ] **Dark Mode**: Toggle between light and dark themes
+### Additional Features
 - [ ] **Task Categories**: Organize tasks by categories/projects
 - [ ] **Due Dates**: Add deadline tracking and notifications
 - [ ] **Priority Levels**: High, medium, low priority sorting
 - [ ] **Task Comments**: Add notes and comments to tasks
-- [ ] **Data Export**: Export tasks to CSV/JSON
 - [ ] **Drag & Drop**: Reorder tasks with drag and drop
 - [ ] **Real-time Sync**: WebSocket integration for multi-user support
 
 ### Technical Improvements
 - [ ] **Unit Tests**: Comprehensive test suite
-- [ ] **Docker**: Containerize the application
 - [ ] **PWA**: Progressive Web App capabilities
 - [ ] **Performance**: Code splitting and lazy loading
 - [ ] **Accessibility**: WCAG compliance improvements
