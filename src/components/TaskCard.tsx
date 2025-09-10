@@ -94,50 +94,52 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      whileHover={{ y: -4, scale: 1.02 }}
+      whileHover={{ y: -2, scale: 1.01 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
       className="h-full"
     >
       <Card hover className="relative group h-full flex flex-col">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center space-x-3 flex-1 min-w-0">
+        <div className="flex items-start justify-between mb-3 gap-2">
+          <div className="flex items-start space-x-2 sm:space-x-3 flex-1 min-w-0">
             <motion.div
               whileHover={{ scale: 1.2, rotate: 5 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="flex-shrink-0"
+              className="flex-shrink-0 mt-1"
             >
               {getStatusIcon(task.status)}
             </motion.div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <h3 className="text-base sm:text-lg font-semibold text-surface-900 dark:text-surface-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-tight">
                 {task.title}
               </h3>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 flex flex-wrap gap-1 sm:gap-2">
                 {getStatusBadge(task.status)}
                 {getPriorityBadge(task.priority)}
                 {task.category && (
-                  <Badge variant="info" className="flex items-center gap-1">
+                  <Badge variant="info" className="flex items-center gap-1 text-xs">
                     <TagIcon className="w-3 h-3" />
-                    {task.category}
+                    <span className="hidden sm:inline">{task.category}</span>
+                    <span className="sm:hidden">{task.category.slice(0, 3)}</span>
                   </Badge>
                 )}
                 {task.dueDate && (
                   <Badge 
                     variant={isOverdue(task.dueDate) && task.status !== 'done' ? 'error' : 'default'} 
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 text-xs"
                   >
                     <CalendarIcon className="w-3 h-3" />
-                    {new Date(task.dueDate).toLocaleDateString()}
+                    <span className="hidden sm:inline">{new Date(task.dueDate).toLocaleDateString()}</span>
+                    <span className="sm:hidden">{new Date(task.dueDate).getDate()}/{new Date(task.dueDate).getMonth() + 1}</span>
                   </Badge>
                 )}
               </div>
             </div>
           </div>
           
-          <Menu as="div" className="relative">
-            <Menu.Button className="p-2 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 transition-all duration-200 opacity-0 group-hover:opacity-100 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-md">
-              <EllipsisVerticalIcon className="h-5 w-5" />
+          <Menu as="div" className="relative flex-shrink-0">
+            <Menu.Button className="p-1.5 sm:p-2 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 transition-all duration-200 opacity-0 group-hover:opacity-100 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-md">
+              <EllipsisVerticalIcon className="h-4 w-4 sm:h-5 sm:w-5" />
             </Menu.Button>
             <Transition
               enter="transition ease-out duration-100"
@@ -183,31 +185,36 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
           </Menu>
         </div>
         
-        <div className="flex-1 mb-4">
-          <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed line-clamp-3">
-            {truncateText(task.description, 120)}
+        <div className="flex-1 mb-3 sm:mb-4">
+          <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed line-clamp-2 sm:line-clamp-3">
+            {truncateText(task.description, window.innerWidth < 640 ? 80 : 120)}
           </p>
           {task.tags && task.tags.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
-              {task.tags.map((tag) => (
+              {task.tags.slice(0, window.innerWidth < 640 ? 2 : 4).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-800 rounded-md dark:bg-primary-900/20 dark:text-primary-300"
+                  className="inline-flex items-center px-1.5 sm:px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-800 rounded-md dark:bg-primary-900/20 dark:text-primary-300"
                 >
                   #{tag}
                 </span>
               ))}
+              {task.tags.length > (window.innerWidth < 640 ? 2 : 4) && (
+                <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 text-xs font-medium bg-surface-100 text-surface-600 rounded-md dark:bg-surface-700 dark:text-surface-400">
+                  +{task.tags.length - (window.innerWidth < 640 ? 2 : 4)}
+                </span>
+              )}
             </div>
           )}
         </div>
         
-        <div className="flex items-center justify-between pt-3 border-t border-surface-200 dark:border-surface-700">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 pt-3 border-t border-surface-200 dark:border-surface-700">
           <select
             value={task.status}
             onChange={(e) => handleStatusChange(e.target.value as Task['status'])}
             disabled={isUpdating}
             className={cn(
-              'text-xs font-medium rounded-lg border border-surface-300 dark:border-surface-600 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all px-2 py-1',
+              'text-xs font-medium rounded-lg border border-surface-300 dark:border-surface-600 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all px-2 py-1 w-full sm:w-auto',
               'bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-600',
               'disabled:opacity-50 disabled:cursor-not-allowed'
             )}
@@ -217,9 +224,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
             <option value="done">Done</option>
           </select>
           
-          <div className="flex items-center space-x-2 text-xs text-surface-500 dark:text-surface-400">
-            <ClockIcon className="h-3 w-3" />
-            <span>{formatRelativeTime(task.updatedAt)}</span>
+          <div className="flex items-center justify-center sm:justify-end space-x-1 sm:space-x-2 text-xs text-surface-500 dark:text-surface-400">
+            <ClockIcon className="h-3 w-3 flex-shrink-0" />
+            <span className="truncate">{formatRelativeTime(task.updatedAt)}</span>
           </div>
         </div>
 
@@ -230,7 +237,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
             className="absolute inset-0 bg-white/80 dark:bg-surface-800/80 backdrop-blur-sm flex items-center justify-center rounded-xl"
           >
             <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+              <div className="h-4 w-4 sm:h-5 sm:w-5 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
               <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">Updating...</span>
             </div>
           </motion.div>

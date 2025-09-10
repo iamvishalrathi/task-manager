@@ -215,63 +215,71 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isOpen, onClose, onSubmit }) 
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label htmlFor="status" className="block text-sm font-medium text-surface-700 dark:text-surface-300">
-              Status
-            </label>
-            <div className="flex items-center space-x-3">
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="block rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-surface-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-surface-600 dark:bg-surface-800 dark:text-surface-100 dark:focus:border-primary-400 dark:focus:ring-primary-400"
-              >
-                <option value="todo">To Do</option>
-                <option value="in-progress">In Progress</option>
-                <option value="done">Done</option>
-              </select>
-              {getStatusBadge(formData.status)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label htmlFor="status" className="block text-sm font-medium text-surface-700 dark:text-surface-300">
+                Status
+              </label>
+              <div className="flex items-center space-x-3">
+                <select
+                  id="status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className="block w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-surface-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-surface-600 dark:bg-surface-800 dark:text-surface-100 dark:focus:border-primary-400 dark:focus:ring-primary-400"
+                >
+                  <option value="todo">To Do</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="done">Done</option>
+                </select>
+                <div className="hidden sm:block">
+                  {getStatusBadge(formData.status)}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="priority" className="block text-sm font-medium text-surface-700 dark:text-surface-300">
+                Priority
+              </label>
+              <div className="flex items-center space-x-3">
+                <select
+                  id="priority"
+                  name="priority"
+                  value={formData.priority}
+                  onChange={handleChange}
+                  className="block w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-surface-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-surface-600 dark:bg-surface-800 dark:text-surface-100 dark:focus:border-primary-400 dark:focus:ring-primary-400"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="critical">Critical</option>
+                </select>
+                <div className="hidden sm:block">
+                  {getPriorityBadge(formData.priority)}
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label htmlFor="priority" className="block text-sm font-medium text-surface-700 dark:text-surface-300">
-              Priority
-            </label>
-            <div className="flex items-center space-x-3">
-              <select
-                id="priority"
-                name="priority"
-                value={formData.priority}
-                onChange={handleChange}
-                className="block rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-surface-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-surface-600 dark:bg-surface-800 dark:text-surface-100 dark:focus:border-primary-400 dark:focus:ring-primary-400"
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="critical">Critical</option>
-              </select>
-              {getPriorityBadge(formData.priority)}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Category"
+              name="category"
+              type="text"
+              value={formData.category}
+              onChange={handleChange}
+              placeholder="e.g., Development, Design"
+            />
+
+            <Input
+              label="Due Date"
+              name="dueDate"
+              type="date"
+              value={formData.dueDate}
+              onChange={handleChange}
+            />
           </div>
-
-          <Input
-            label="Category"
-            name="category"
-            type="text"
-            value={formData.category}
-            onChange={handleChange}
-            placeholder="e.g., Development, Design, Testing"
-          />
-
-          <Input
-            label="Due Date"
-            name="dueDate"
-            type="date"
-            value={formData.dueDate}
-            onChange={handleChange}
-          />
 
           <div className="space-y-1">
             <label className="block text-sm font-medium text-surface-700 dark:text-surface-300">
@@ -286,7 +294,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isOpen, onClose, onSubmit }) 
                 placeholder="Add a tag"
                 className="flex-1 rounded-lg border border-surface-300 bg-white px-3 py-2 text-surface-900 placeholder-surface-500 transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-surface-600 dark:bg-surface-800 dark:text-surface-100 dark:placeholder-surface-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
               />
-              <Button type="button" onClick={handleTagAdd} variant="outline" size="sm">
+              <Button type="button" onClick={handleTagAdd} variant="outline" size="sm" className="whitespace-nowrap">
                 Add
               </Button>
             </div>
@@ -301,7 +309,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isOpen, onClose, onSubmit }) 
                   >
                     <Badge
                       variant="info"
-                      className="cursor-pointer hover:bg-red-100 dark:hover:bg-red-900"
+                      className="cursor-pointer hover:bg-red-100 dark:hover:bg-red-900 transition-colors"
                     >
                       {tag} ×
                     </Badge>
@@ -312,10 +320,10 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isOpen, onClose, onSubmit }) 
           </div>
         </div>
 
-        <div className="flex space-x-3 pt-4 border-t border-surface-200 dark:border-surface-700">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-surface-200 dark:border-surface-700">
           <Button
             type="submit"
-            className="flex-1"
+            className="flex-1 order-2 sm:order-1"
             loading={isSubmitting}
             disabled={!formData.title.trim()}
           >
@@ -326,7 +334,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isOpen, onClose, onSubmit }) 
             variant="outline"
             onClick={onClose}
             disabled={isSubmitting}
-            className="flex-1"
+            className="flex-1 order-1 sm:order-2"
           >
             Cancel
           </Button>

@@ -91,8 +91,8 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-surface-900 dark:via-surface-800 dark:to-surface-900 flex items-center justify-center p-4">
-      <div className="absolute top-4 right-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-surface-900 dark:via-surface-800 dark:to-surface-900 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="absolute top-4 right-4 z-10">
         <ThemeToggle />
       </div>
       
@@ -100,23 +100,23 @@ const Login: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-sm sm:max-w-md"
       >
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="mx-auto h-16 w-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-4 shadow-large"
+            className="mx-auto h-12 w-12 sm:h-16 sm:w-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-4 shadow-large"
           >
-            <UserIcon className="h-8 w-8 text-white" />
+            <UserIcon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
           </motion.div>
           
           <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-3xl font-bold text-surface-900 dark:text-surface-100 mb-2"
+            className="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-surface-100 mb-2"
           >
             Welcome Back
           </motion.h1>
@@ -125,14 +125,14 @@ const Login: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-surface-600 dark:text-surface-400"
+            className="text-sm sm:text-base text-surface-600 dark:text-surface-400"
           >
             Sign in to your account to continue
           </motion.p>
         </div>
 
         <Card className="animate-slide-up">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             <div className="space-y-4">
               <Input
                 label="Username"
@@ -141,7 +141,7 @@ const Login: React.FC = () => {
                 value={credentials.username}
                 onChange={handleChange}
                 error={errors.username}
-                leftIcon={<UserIcon className="h-5 w-5" />}
+                leftIcon={<UserIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
                 placeholder="Enter your username"
                 autoComplete="username"
               />
@@ -182,7 +182,7 @@ const Login: React.FC = () => {
               </motion.div>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-3 sm:space-y-4">
               <Button
                 type="submit"
                 className="w-full"
@@ -198,14 +198,15 @@ const Login: React.FC = () => {
                 className="w-full"
                 onClick={handleDemoLogin}
                 disabled={loading}
+                size="lg"
               >
                 Use Demo Credentials
               </Button>
             </div>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-surface-200 dark:border-surface-700">
-            <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4">
+          <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-surface-200 dark:border-surface-700">
+            <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 sm:p-4">
               <h3 className="text-sm font-medium text-primary-800 dark:text-primary-200 mb-2">
                 Demo Credentials
               </h3>
