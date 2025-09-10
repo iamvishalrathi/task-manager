@@ -43,6 +43,8 @@ const Dashboard: React.FC = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterPriority, setFilterPriority] = useState<string>('all');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -137,9 +139,13 @@ const Dashboard: React.FC = () => {
 
   const filteredTasks = tasks.filter((task) => {
     const matchesStatus = filterStatus === 'all' || task.status === filterStatus;
+    const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
+    const matchesCategory = filterCategory === 'all' || task.category === filterCategory;
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         task.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
+                         task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         (task.category && task.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                         (task.tags && task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())));
+    return matchesStatus && matchesPriority && matchesCategory && matchesSearch;
   });
 
   const taskCounts = {
@@ -147,8 +153,12 @@ const Dashboard: React.FC = () => {
     todo: tasks.filter(t => t.status === 'todo').length,
     'in-progress': tasks.filter(t => t.status === 'in-progress').length,
     done: tasks.filter(t => t.status === 'done').length,
+    critical: tasks.filter(t => t.priority === 'critical').length,
+    high: tasks.filter(t => t.priority === 'high').length,
+    overdue: tasks.filter(t => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'done').length,
   };
 
+  const categories = Array.from(new Set(tasks.map(t => t.category).filter(Boolean)));
   const completionRate = taskCounts.all > 0 ? Math.round((taskCounts.done / taskCounts.all) * 100) : 0;
 
   return (
@@ -210,7 +220,7 @@ const Dashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6"
         >
           <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
             <div className="p-2">
@@ -253,6 +263,52 @@ const Dashboard: React.FC = () => {
           </Card>
         </motion.div>
 
+        {/* Additional Stats */}
+        {(taskCounts.critical > 0 || taskCounts.high > 0 || taskCounts.overdue > 0) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8"
+          >
+            {taskCounts.critical > 0 && (
+              <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
+                <div className="p-2">
+                  <div className="w-10 h-10 mx-auto mb-2 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                    <ExclamationCircleIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">Critical Priority</h3>
+                  <p className="text-2xl font-bold text-red-600 dark:text-red-400">{taskCounts.critical}</p>
+                </div>
+              </Card>
+            )}
+            
+            {taskCounts.high > 0 && (
+              <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
+                <div className="p-2">
+                  <div className="w-10 h-10 mx-auto mb-2 bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg flex items-center justify-center">
+                    <ClockIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">High Priority</h3>
+                  <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{taskCounts.high}</p>
+                </div>
+              </Card>
+            )}
+            
+            {taskCounts.overdue > 0 && (
+              <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
+                <div className="p-2">
+                  <div className="w-10 h-10 mx-auto mb-2 bg-gradient-to-br from-red-400 to-red-500 rounded-lg flex items-center justify-center">
+                    <ClockIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">Overdue</h3>
+                  <p className="text-2xl font-bold text-red-600 dark:text-red-400">{taskCounts.overdue}</p>
+                </div>
+              </Card>
+            )}
+          </motion.div>
+        )}
+
         {/* Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -272,19 +328,52 @@ const Dashboard: React.FC = () => {
               />
             </div>
             
-            {/* Filter */}
-            <div className="flex items-center space-x-3 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
-              <FunnelIcon className="h-4 w-4 text-surface-500 dark:text-surface-400 flex-shrink-0" />
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
-              >
-                <option value="all" className="bg-white dark:bg-surface-800">All Status</option>
-                <option value="todo" className="bg-white dark:bg-surface-800">To Do</option>
-                <option value="in-progress" className="bg-white dark:bg-surface-800">In Progress</option>
-                <option value="done" className="bg-white dark:bg-surface-800">Done</option>
-              </select>
+            {/* Filters */}
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center space-x-2 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
+                <FunnelIcon className="h-4 w-4 text-surface-500 dark:text-surface-400 flex-shrink-0" />
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
+                >
+                  <option value="all" className="bg-white dark:bg-surface-800">All Status</option>
+                  <option value="todo" className="bg-white dark:bg-surface-800">To Do</option>
+                  <option value="in-progress" className="bg-white dark:bg-surface-800">In Progress</option>
+                  <option value="done" className="bg-white dark:bg-surface-800">Done</option>
+                </select>
+              </div>
+
+              <div className="flex items-center space-x-2 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
+                <select
+                  value={filterPriority}
+                  onChange={(e) => setFilterPriority(e.target.value)}
+                  className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
+                >
+                  <option value="all" className="bg-white dark:bg-surface-800">All Priority</option>
+                  <option value="critical" className="bg-white dark:bg-surface-800">Critical</option>
+                  <option value="high" className="bg-white dark:bg-surface-800">High</option>
+                  <option value="medium" className="bg-white dark:bg-surface-800">Medium</option>
+                  <option value="low" className="bg-white dark:bg-surface-800">Low</option>
+                </select>
+              </div>
+
+              {categories.length > 0 && (
+                <div className="flex items-center space-x-2 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
+                  <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
+                  >
+                    <option value="all" className="bg-white dark:bg-surface-800">All Categories</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category} className="bg-white dark:bg-surface-800">
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* View Mode Toggle */}
@@ -324,7 +413,7 @@ const Dashboard: React.FC = () => {
         </motion.div>
 
         {/* Filter Tags */}
-        {(searchQuery || filterStatus !== 'all') && (
+        {(searchQuery || filterStatus !== 'all' || filterPriority !== 'all' || filterCategory !== 'all') && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -348,6 +437,28 @@ const Dashboard: React.FC = () => {
                 <button
                   onClick={() => setFilterStatus('all')}
                   className="ml-1 hover:text-surface-700"
+                >
+                  ×
+                </button>
+              </Badge>
+            )}
+            {filterPriority !== 'all' && (
+              <Badge variant="warning">
+                Priority: {filterPriority}
+                <button
+                  onClick={() => setFilterPriority('all')}
+                  className="ml-1 hover:text-yellow-700"
+                >
+                  ×
+                </button>
+              </Badge>
+            )}
+            {filterCategory !== 'all' && (
+              <Badge variant="info">
+                Category: {filterCategory}
+                <button
+                  onClick={() => setFilterCategory('all')}
+                  className="ml-1 hover:text-blue-700"
                 >
                   ×
                 </button>

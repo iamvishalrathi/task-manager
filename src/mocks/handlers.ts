@@ -8,14 +8,23 @@ const mockTasks: Task[] = [
     title: 'Complete project setup',
     description: 'Set up the initial project structure and dependencies',
     status: 'done',
+    priority: 'high',
+    category: 'Development',
+    tags: ['setup', 'initial'],
+    dueDate: '2024-01-20T00:00:00.000Z',
     createdAt: '2024-01-15T10:00:00.000Z',
     updatedAt: '2024-01-15T10:00:00.000Z',
+    completedAt: '2024-01-16T14:30:00.000Z',
   },
   {
     id: '2',
     title: 'Implement authentication',
     description: 'Add login and logout functionality with JWT',
     status: 'in-progress',
+    priority: 'critical',
+    category: 'Security',
+    tags: ['auth', 'jwt', 'security'],
+    dueDate: '2024-02-01T00:00:00.000Z',
     createdAt: '2024-01-16T09:00:00.000Z',
     updatedAt: '2024-01-16T09:00:00.000Z',
   },
@@ -24,8 +33,35 @@ const mockTasks: Task[] = [
     title: 'Design task dashboard',
     description: 'Create a responsive dashboard for managing tasks',
     status: 'todo',
+    priority: 'medium',
+    category: 'UI/UX',
+    tags: ['dashboard', 'responsive', 'design'],
+    dueDate: '2024-01-25T00:00:00.000Z',
     createdAt: '2024-01-17T08:00:00.000Z',
     updatedAt: '2024-01-17T08:00:00.000Z',
+  },
+  {
+    id: '4',
+    title: 'Write unit tests',
+    description: 'Add comprehensive unit tests for all components',
+    status: 'todo',
+    priority: 'low',
+    category: 'Testing',
+    tags: ['testing', 'unit-tests', 'quality'],
+    dueDate: '2024-02-15T00:00:00.000Z',
+    createdAt: '2024-01-18T11:00:00.000Z',
+    updatedAt: '2024-01-18T11:00:00.000Z',
+  },
+  {
+    id: '5',
+    title: 'Optimize performance',
+    description: 'Analyze and optimize application performance',
+    status: 'todo',
+    priority: 'high',
+    category: 'Performance',
+    tags: ['optimization', 'performance', 'analysis'],
+    createdAt: '2024-01-19T13:00:00.000Z',
+    updatedAt: '2024-01-19T13:00:00.000Z',
   },
 ];
 
@@ -66,10 +102,14 @@ export const handlers = [
 
   // Create task
   http.post('/api/tasks', async ({ request }) => {
-    const { title, description, status } = await request.json() as {
+    const { title, description, status, priority, category, tags, dueDate } = await request.json() as {
       title: string;
       description: string;
       status: 'todo' | 'in-progress' | 'done';
+      priority?: 'low' | 'medium' | 'high' | 'critical';
+      category?: string;
+      tags?: string[];
+      dueDate?: string;
     };
     
     const newTask: Task = {
@@ -77,6 +117,10 @@ export const handlers = [
       title,
       description,
       status: status || 'todo',
+      priority: priority || 'medium',
+      category: category || 'General',
+      tags: tags || [],
+      dueDate,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

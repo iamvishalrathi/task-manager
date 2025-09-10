@@ -6,13 +6,16 @@ import {
   ClockIcon, 
   CheckCircleIcon, 
   ExclamationCircleIcon,
-  EllipsisVerticalIcon
+  EllipsisVerticalIcon,
+  CalendarIcon,
+  TagIcon
 } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
 import type { Task } from '../store/taskSlice';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
 import { formatRelativeTime, truncateText, cn } from '../utils';
+import { getPriorityColor, getPriorityIcon, isOverdue } from '../utils/taskUtils';
 import toast from 'react-hot-toast';
 
 interface TaskCardProps {
@@ -45,6 +48,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
       default:
         return <Badge variant="default">To Do</Badge>;
     }
+  };
+
+  const getPriorityBadge = (priority: Task['priority']) => {
+    const Icon = getPriorityIcon(priority);
+    return (
+      <Badge className={`${getPriorityColor(priority)} flex items-center gap-1`}>
+        <Icon className="w-3 h-3" />
+        {priority.charAt(0).toUpperCase() + priority.slice(1)}
+      </Badge>
+    );
   };
 
   const handleStatusChange = async (newStatus: Task['status']) => {
@@ -100,8 +113,24 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
               <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {task.title}
               </h3>
-              <div className="mt-2">
+              <div className="mt-2 flex flex-wrap gap-2">
                 {getStatusBadge(task.status)}
+                {getPriorityBadge(task.priority)}
+                {task.category && (
+                  <Badge variant="info" className="flex items-center gap-1">
+                    <TagIcon className="w-3 h-3" />
+                    {task.category}
+                  </Badge>
+                )}
+                {task.dueDate && (
+                  <Badge 
+                    variant={isOverdue(task.dueDate) && task.status !== 'done' ? 'error' : 'default'} 
+                    className="flex items-center gap-1"
+                  >
+                    <CalendarIcon className="w-3 h-3" />
+                    {new Date(task.dueDate).toLocaleDateString()}
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
@@ -158,6 +187,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
           <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed line-clamp-3">
             {truncateText(task.description, 120)}
           </p>
+          {task.tags && task.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {task.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-800 rounded-md dark:bg-primary-900/20 dark:text-primary-300"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         
         <div className="flex items-center justify-between pt-3 border-t border-surface-200 dark:border-surface-700">
