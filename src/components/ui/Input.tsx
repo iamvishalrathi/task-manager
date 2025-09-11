@@ -40,6 +40,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               rightIcon && 'pr-10',
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20 hover:border-red-500',
               'disabled:bg-surface-100 disabled:text-surface-500 disabled:cursor-not-allowed dark:disabled:bg-surface-700',
+              // Date picker icon styling for light and dark modes
+              props.type === 'date' && '[&::-webkit-calendar-picker-indicator]:dark:invert [&::-webkit-calendar-picker-indicator]:cursor-pointer',
               className
             )}
             ref={ref}
