@@ -80,21 +80,21 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
       exit={{ opacity: 0, y: -20 }}
       className="h-full"
     >
-      <Card hover className="relative group h-full flex flex-col p-4">
+      <Card hover className="relative group h-full flex flex-col p-3 sm:p-4">
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-2 line-clamp-1">
+            <h3 className="text-base sm:text-lg font-semibold text-surface-900 dark:text-surface-100 mb-2 line-clamp-2">
               {task.title}
             </h3>
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
               {getStatusBadge(task.status)}
               {task.priority !== 'low' && getPriorityBadge(task.priority)}
             </div>
           </div>
           
           <Menu as="div" className="relative flex-shrink-0">
-            <Menu.Button className="p-1.5 sm:p-2 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 transition-all duration-200 opacity-0 group-hover:opacity-100 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-md">
-              <EllipsisVerticalIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Menu.Button className="p-1.5 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 transition-all duration-200 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-md">
+              <EllipsisVerticalIcon className="h-4 w-4" />
             </Menu.Button>
             <Transition
               enter="transition ease-out duration-100"
@@ -140,32 +140,36 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
           </Menu>
         </div>
         
-        <div className="flex-1 mb-4">
+        <div className="flex-1 mb-3 sm:mb-4">
           {task.description && (
-            <p className="text-surface-600 dark:text-surface-400 text-sm line-clamp-2 mb-3">
+            <p className="text-surface-600 dark:text-surface-400 text-sm line-clamp-2 mb-2 sm:mb-3">
               {task.description}
             </p>
           )}
           {task.dueDate && (
-            <div className="text-xs text-surface-500 dark:text-surface-400 mb-2">
-              Due: {new Date(task.dueDate).toLocaleDateString()}
+            <div className="text-xs text-surface-500 dark:text-surface-400 mb-1 sm:mb-2">
+              Due: {new Date(task.dueDate).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: window.innerWidth < 640 ? '2-digit' : 'numeric'
+              })}
             </div>
           )}
         </div>
         
-        <div className="flex items-center justify-between pt-3 border-t border-surface-200 dark:border-surface-700">
+        <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-surface-200 dark:border-surface-700">
           <select
             value={task.status}
             onChange={(e) => handleStatusChange(e.target.value as Task['status'])}
             disabled={isUpdating}
-            className="text-xs font-medium rounded-md border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-200 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            className="text-xs font-medium rounded-md border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-200 px-1.5 sm:px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-500"
           >
             <option value="todo">To Do</option>
-            <option value="in-progress">In Progress</option>
+            <option value="in-progress">Progress</option>
             <option value="done">Done</option>
           </select>
           
-          <div className="text-xs text-surface-500 dark:text-surface-400">
+          <div className="text-xs text-surface-500 dark:text-surface-400 truncate ml-2">
             {formatRelativeTime(task.updatedAt)}
           </div>
         </div>

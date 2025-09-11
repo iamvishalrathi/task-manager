@@ -24,9 +24,9 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const sizeClasses = {
     sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
+    md: 'max-w-lg sm:max-w-xl',
+    lg: 'max-w-xl sm:max-w-2xl',
+    xl: 'max-w-2xl sm:max-w-4xl',
   };
 
   return (
@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full items-center justify-center p-2 sm:p-4 text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -57,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
             >
               <Dialog.Panel
                 className={cn(
-                  'w-full transform overflow-hidden rounded-2xl bg-white dark:bg-surface-800 p-6 text-left align-middle shadow-xl transition-all',
+                  'w-full transform overflow-hidden rounded-2xl bg-white dark:bg-surface-800 p-4 sm:p-6 text-left align-middle shadow-xl transition-all',
                   sizeClasses[size]
                 )}
               >

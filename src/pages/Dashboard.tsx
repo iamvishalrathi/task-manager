@@ -228,37 +228,37 @@ const Dashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8"
         >
-          <Card className="text-center p-4">
-            <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-              <Squares2X2Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          <Card className="text-center p-2 sm:p-4">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+              <Squares2X2Icon className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.all}</p>
+            <p className="text-xl sm:text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.all}</p>
             <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">Total</h3>
           </Card>
           
-          <Card className="text-center p-4">
-            <div className="w-8 h-8 mx-auto mb-2 bg-gray-100 dark:bg-gray-900/30 rounded-lg flex items-center justify-center">
-              <ExclamationCircleIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+          <Card className="text-center p-2 sm:p-4">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 bg-gray-100 dark:bg-gray-900/30 rounded-lg flex items-center justify-center">
+              <ExclamationCircleIcon className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600 dark:text-gray-400" />
             </div>
-            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.todo}</p>
+            <p className="text-xl sm:text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.todo}</p>
             <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">To Do</h3>
           </Card>
           
-          <Card className="text-center p-4">
-            <div className="w-8 h-8 mx-auto mb-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
-              <ClockIcon className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+          <Card className="text-center p-2 sm:p-4">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
+              <ClockIcon className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-600 dark:text-yellow-400" />
             </div>
-            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts['in-progress']}</p>
+            <p className="text-xl sm:text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts['in-progress']}</p>
             <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">Progress</h3>
           </Card>
           
-          <Card className="text-center p-4">
-            <div className="w-8 h-8 mx-auto mb-2 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-              <CheckCircleIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
+          <Card className="text-center p-2 sm:p-4">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+              <CheckCircleIcon className="h-3 w-3 sm:h-4 sm:w-4 text-green-600 dark:text-green-400" />
             </div>
-            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.done}</p>
+            <p className="text-xl sm:text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.done}</p>
             <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">Done</h3>
           </Card>
         </motion.div>
@@ -296,30 +296,30 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Second row: Filters and View Mode */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center sm:gap-4">
             {/* Filters */}
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-              <div className="flex items-center space-x-2 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
-                <FunnelIcon className="h-4 w-4 text-surface-500 dark:text-surface-400 flex-shrink-0" />
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="flex items-center space-x-1 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-2 py-1.5 flex-shrink-0">
+                <FunnelIcon className="h-3 w-3 text-surface-500 dark:text-surface-400" />
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
+                  className="bg-transparent border-none text-xs sm:text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer min-w-0"
                 >
-                  <option value="all" className="bg-white dark:bg-surface-800">All Status</option>
+                  <option value="all" className="bg-white dark:bg-surface-800">All</option>
                   <option value="todo" className="bg-white dark:bg-surface-800">To Do</option>
-                  <option value="in-progress" className="bg-white dark:bg-surface-800">In Progress</option>
+                  <option value="in-progress" className="bg-white dark:bg-surface-800">Progress</option>
                   <option value="done" className="bg-white dark:bg-surface-800">Done</option>
                 </select>
               </div>
 
-              <div className="flex items-center space-x-2 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
+              <div className="flex items-center space-x-1 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-2 py-1.5 flex-shrink-0">
                 <select
                   value={filterPriority}
                   onChange={(e) => setFilterPriority(e.target.value)}
-                  className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
+                  className="bg-transparent border-none text-xs sm:text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer min-w-0"
                 >
-                  <option value="all" className="bg-white dark:bg-surface-800">All Priority</option>
+                  <option value="all" className="bg-white dark:bg-surface-800">Priority</option>
                   <option value="critical" className="bg-white dark:bg-surface-800">Critical</option>
                   <option value="high" className="bg-white dark:bg-surface-800">High</option>
                   <option value="medium" className="bg-white dark:bg-surface-800">Medium</option>
@@ -328,13 +328,13 @@ const Dashboard: React.FC = () => {
               </div>
 
               {categories.length > 0 && (
-                <div className="flex items-center space-x-2 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 min-w-fit">
+                <div className="flex items-center space-x-1 bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 px-2 py-1.5 flex-shrink-0">
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer"
+                    className="bg-transparent border-none text-xs sm:text-sm focus:outline-none focus:ring-0 text-surface-900 dark:text-surface-100 cursor-pointer min-w-0"
                   >
-                    <option value="all" className="bg-white dark:bg-surface-800">All Categories</option>
+                    <option value="all" className="bg-white dark:bg-surface-800">Category</option>
                     {categories.map((category) => (
                       <option key={category} value={category} className="bg-white dark:bg-surface-800">
                         {category}
@@ -346,30 +346,30 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-surface-100 dark:bg-surface-800 rounded-lg p-1 border border-surface-200 dark:border-surface-700 w-full sm:w-auto">
+            <div className="flex items-center bg-surface-100 dark:bg-surface-800 rounded-lg p-0.5 border border-surface-200 dark:border-surface-700 w-full sm:w-auto">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`flex-1 sm:flex-none p-2 rounded-md transition-all duration-200 ${
+                className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1 ${
                   viewMode === 'grid' 
-                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400 scale-105' 
+                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400' 
                     : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-300'
                 }`}
                 title="Grid View"
               >
-                <Squares2X2Icon className="h-4 w-4 mx-auto" />
-                <span className="text-xs mt-1 sm:hidden">Grid</span>
+                <Squares2X2Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="text-xs sm:hidden">Grid</span>
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`flex-1 sm:flex-none p-2 rounded-md transition-all duration-200 ${
+                className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1 ${
                   viewMode === 'list' 
-                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400 scale-105' 
+                    ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400' 
                     : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-300'
                 }`}
                 title="List View"
               >
-                <ListBulletIcon className="h-4 w-4 mx-auto" />
-                <span className="text-xs mt-1 sm:hidden">List</span>
+                <ListBulletIcon className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="text-xs sm:hidden">List</span>
               </button>
             </div>
           </div>
@@ -499,7 +499,7 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={`grid gap-4 sm:gap-6 ${
+              className={`grid gap-3 sm:gap-4 ${
                 viewMode === 'grid' 
                   ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
                   : 'grid-cols-1 max-w-4xl mx-auto'
