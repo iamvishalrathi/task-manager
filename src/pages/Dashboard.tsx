@@ -228,94 +228,42 @@ const Dashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8"
+          className="grid grid-cols-4 gap-4 mb-8"
         >
-          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-            <div className="p-3 sm:p-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center">
-                <Squares2X2Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-              </div>
-              <h3 className="text-xs sm:text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">Total</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.all}</p>
+          <Card className="text-center p-4">
+            <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+              <Squares2X2Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             </div>
+            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.all}</p>
+            <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">Total</h3>
           </Card>
           
-          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-            <div className="p-3 sm:p-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-gradient-to-br from-surface-400 to-surface-500 rounded-xl flex items-center justify-center">
-                <ExclamationCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-              </div>
-              <h3 className="text-xs sm:text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">To Do</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-surface-600 dark:text-surface-300">{taskCounts.todo}</p>
+          <Card className="text-center p-4">
+            <div className="w-8 h-8 mx-auto mb-2 bg-gray-100 dark:bg-gray-900/30 rounded-lg flex items-center justify-center">
+              <ExclamationCircleIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
             </div>
+            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.todo}</p>
+            <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">To Do</h3>
           </Card>
           
-          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-            <div className="p-3 sm:p-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl flex items-center justify-center">
-                <ClockIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-              </div>
-              <h3 className="text-xs sm:text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">Progress</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400">{taskCounts['in-progress']}</p>
+          <Card className="text-center p-4">
+            <div className="w-8 h-8 mx-auto mb-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
+              <ClockIcon className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
             </div>
+            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts['in-progress']}</p>
+            <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">Progress</h3>
           </Card>
           
-          <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-            <div className="p-3 sm:p-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-gradient-to-br from-green-400 to-green-500 rounded-xl flex items-center justify-center">
-                <CheckCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-              </div>
-              <h3 className="text-xs sm:text-sm font-medium text-surface-500 dark:text-surface-400 mb-1">Done</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{taskCounts.done}</p>
+          <Card className="text-center p-4">
+            <div className="w-8 h-8 mx-auto mb-2 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+              <CheckCircleIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
             </div>
+            <p className="text-2xl font-bold text-surface-900 dark:text-surface-100">{taskCounts.done}</p>
+            <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400">Done</h3>
           </Card>
         </motion.div>
 
-        {/* Additional Stats */}
-        {(taskCounts.critical > 0 || taskCounts.high > 0 || taskCounts.overdue > 0) && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8"
-          >
-            {taskCounts.critical > 0 && (
-              <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-                <div className="p-3 sm:p-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
-                    <ExclamationCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">Critical</h3>
-                  <p className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">{taskCounts.critical}</p>
-                </div>
-              </Card>
-            )}
-            
-            {taskCounts.high > 0 && (
-              <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-                <div className="p-3 sm:p-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg flex items-center justify-center">
-                    <ClockIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">High Priority</h3>
-                  <p className="text-xl sm:text-2xl font-bold text-orange-600 dark:text-orange-400">{taskCounts.high}</p>
-                </div>
-              </Card>
-            )}
-            
-            {taskCounts.overdue > 0 && (
-              <Card className="text-center group hover:scale-105 transition-transform duration-200" hover>
-                <div className="p-3 sm:p-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-red-400 to-red-500 rounded-lg flex items-center justify-center">
-                    <ClockIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <h3 className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">Overdue</h3>
-                  <p className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">{taskCounts.overdue}</p>
-                </div>
-              </Card>
-            )}
-          </motion.div>
-        )}
+
 
         {/* Controls */}
         <motion.div

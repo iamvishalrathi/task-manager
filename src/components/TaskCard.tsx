@@ -3,19 +3,14 @@ import { motion } from 'framer-motion';
 import { 
   PencilIcon, 
   TrashIcon, 
-  ClockIcon, 
-  CheckCircleIcon, 
-  ExclamationCircleIcon,
-  EllipsisVerticalIcon,
-  CalendarIcon,
-  TagIcon
+  EllipsisVerticalIcon
 } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
 import type { Task } from '../store/taskSlice';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
-import { formatRelativeTime, truncateText, cn } from '../utils';
-import { getPriorityColor, getPriorityIcon, isOverdue } from '../utils/taskUtils';
+import { formatRelativeTime, cn } from '../utils';
+import { getPriorityColor, getPriorityIcon } from '../utils/taskUtils';
 import toast from 'react-hot-toast';
 
 interface TaskCardProps {
@@ -27,17 +22,6 @@ interface TaskCardProps {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusChange }) => {
   const [isUpdating, setIsUpdating] = useState(false);
-
-  const getStatusIcon = (status: Task['status']) => {
-    switch (status) {
-      case 'done':
-        return <CheckCircleIcon className="h-5 w-5 text-green-600 dark:text-green-400" />;
-      case 'in-progress':
-        return <ClockIcon className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />;
-      default:
-        return <ExclamationCircleIcon className="h-5 w-5 text-surface-400 dark:text-surface-500" />;
-    }
-  };
 
   const getStatusBadge = (status: Task['status']) => {
     switch (status) {
@@ -94,46 +78,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      whileHover={{ y: -2, scale: 1.01 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
       className="h-full"
     >
-      <Card hover className="relative group h-full flex flex-col">
-        <div className="flex items-start justify-between mb-3 gap-2">
-          <div className="flex items-start space-x-2 sm:space-x-3 flex-1 min-w-0">
-            <motion.div
-              whileHover={{ scale: 1.2, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="flex-shrink-0 mt-1"
-            >
-              {getStatusIcon(task.status)}
-            </motion.div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-base sm:text-lg font-semibold text-surface-900 dark:text-surface-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-tight">
-                {task.title}
-              </h3>
-              <div className="mt-2 flex flex-wrap gap-1 sm:gap-2">
-                {getStatusBadge(task.status)}
-                {getPriorityBadge(task.priority)}
-                {task.category && (
-                  <Badge variant="info" className="flex items-center gap-1 text-xs">
-                    <TagIcon className="w-3 h-3" />
-                    <span className="hidden sm:inline">{task.category}</span>
-                    <span className="sm:hidden">{task.category.slice(0, 3)}</span>
-                  </Badge>
-                )}
-                {task.dueDate && (
-                  <Badge 
-                    variant={isOverdue(task.dueDate) && task.status !== 'done' ? 'error' : 'default'} 
-                    className="flex items-center gap-1 text-xs"
-                  >
-                    <CalendarIcon className="w-3 h-3" />
-                    <span className="hidden sm:inline">{new Date(task.dueDate).toLocaleDateString()}</span>
-                    <span className="sm:hidden">{new Date(task.dueDate).getDate()}/{new Date(task.dueDate).getMonth() + 1}</span>
-                  </Badge>
-                )}
-              </div>
+      <Card hover className="relative group h-full flex flex-col p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-2 line-clamp-1">
+              {task.title}
+            </h3>
+            <div className="flex items-center gap-2 mb-3">
+              {getStatusBadge(task.status)}
+              {task.priority !== 'low' && getPriorityBadge(task.priority)}
             </div>
           </div>
           
@@ -185,48 +140,33 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
           </Menu>
         </div>
         
-        <div className="flex-1 mb-3 sm:mb-4">
-          <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed line-clamp-2 sm:line-clamp-3">
-            {truncateText(task.description, window.innerWidth < 640 ? 80 : 120)}
-          </p>
-          {task.tags && task.tags.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {task.tags.slice(0, window.innerWidth < 640 ? 2 : 4).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center px-1.5 sm:px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-800 rounded-md dark:bg-primary-900/20 dark:text-primary-300"
-                >
-                  #{tag}
-                </span>
-              ))}
-              {task.tags.length > (window.innerWidth < 640 ? 2 : 4) && (
-                <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 text-xs font-medium bg-surface-100 text-surface-600 rounded-md dark:bg-surface-700 dark:text-surface-400">
-                  +{task.tags.length - (window.innerWidth < 640 ? 2 : 4)}
-                </span>
-              )}
+        <div className="flex-1 mb-4">
+          {task.description && (
+            <p className="text-surface-600 dark:text-surface-400 text-sm line-clamp-2 mb-3">
+              {task.description}
+            </p>
+          )}
+          {task.dueDate && (
+            <div className="text-xs text-surface-500 dark:text-surface-400 mb-2">
+              Due: {new Date(task.dueDate).toLocaleDateString()}
             </div>
           )}
         </div>
         
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 pt-3 border-t border-surface-200 dark:border-surface-700">
+        <div className="flex items-center justify-between pt-3 border-t border-surface-200 dark:border-surface-700">
           <select
             value={task.status}
             onChange={(e) => handleStatusChange(e.target.value as Task['status'])}
             disabled={isUpdating}
-            className={cn(
-              'text-xs font-medium rounded-lg border border-surface-300 dark:border-surface-600 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all px-2 py-1 w-full sm:w-auto',
-              'bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-600',
-              'disabled:opacity-50 disabled:cursor-not-allowed'
-            )}
+            className="text-xs font-medium rounded-md border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-200 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-500"
           >
             <option value="todo">To Do</option>
             <option value="in-progress">In Progress</option>
             <option value="done">Done</option>
           </select>
           
-          <div className="flex items-center justify-center sm:justify-end space-x-1 sm:space-x-2 text-xs text-surface-500 dark:text-surface-400">
-            <ClockIcon className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{formatRelativeTime(task.updatedAt)}</span>
+          <div className="text-xs text-surface-500 dark:text-surface-400">
+            {formatRelativeTime(task.updatedAt)}
           </div>
         </div>
 
