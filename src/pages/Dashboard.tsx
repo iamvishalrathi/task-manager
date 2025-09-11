@@ -345,31 +345,29 @@ const Dashboard: React.FC = () => {
               )}
             </div>
 
-            {/* View Mode Toggle */}
-            <div className="flex items-center bg-surface-100 dark:bg-surface-800 rounded-lg p-0.5 border border-surface-200 dark:border-surface-700 w-full sm:w-auto">
+            {/* View Mode Toggle - Hidden on mobile */}
+            <div className="hidden sm:flex items-center bg-surface-100 dark:bg-surface-800 rounded-lg p-0.5 border border-surface-200 dark:border-surface-700 w-auto">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1 ${
+                className={`flex-none px-3 py-1.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1 ${
                   viewMode === 'grid' 
                     ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400' 
                     : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-300'
                 }`}
                 title="Grid View"
               >
-                <Squares2X2Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="text-xs sm:hidden">Grid</span>
+                <Squares2X2Icon className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1 ${
+                className={`flex-none px-3 py-1.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1 ${
                   viewMode === 'list' 
                     ? 'bg-white dark:bg-surface-700 shadow-sm text-primary-600 dark:text-primary-400' 
                     : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-300'
                 }`}
                 title="List View"
               >
-                <ListBulletIcon className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="text-xs sm:hidden">List</span>
+                <ListBulletIcon className="h-4 w-4" />
               </button>
             </div>
           </div>
