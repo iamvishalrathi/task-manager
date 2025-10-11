@@ -9,6 +9,7 @@ import { Menu, Transition } from '@headlessui/react';
 import type { Task } from '../store/taskSlice';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
+import { ConfirmModal } from './ui/ConfirmModal';
 import { formatRelativeTime, cn } from '../utils';
 import { getPriorityColor, getPriorityIcon } from '../utils/taskUtils';
 import toast from 'react-hot-toast';
@@ -22,6 +23,7 @@ interface TaskCardProps {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusChange }) => {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const getStatusBadge = (status: Task['status']) => {
     switch (status) {
@@ -59,13 +61,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
-      try {
-        await onDelete(task.id);
-        toast.success('Task deleted successfully');
-      } catch {
-        toast.error('Failed to delete task');
-      }
+    try {
+      await onDelete(task.id);
+      toast.success('Task deleted successfully');
+    } catch {
+      toast.error('Failed to delete task');
     }
   };
 
@@ -123,7 +123,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={handleDelete}
+                        onClick={() => setShowDeleteConfirm(true)}
                         className={cn(
                           'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                           active ? 'bg-red-500 text-white' : 'text-red-600 dark:text-red-400'
@@ -187,6 +187,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onStatusCha
           </motion.div>
         )}
       </Card>
+      
+      <ConfirmModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        title="Delete Task"
+        message={`Are you sure you want to delete "${task.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </motion.div>
   );
 };
